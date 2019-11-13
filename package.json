@@ -12,7 +12,8 @@
     "semi": false,
     "singleQuote": true,
     "jsxSingleQuote": true,
-    "useTabs": false
+    "useTabs": false,
+    "printWidth": 100
   },
   "devDependencies": {
     "browser-sync": "^2.26.7",

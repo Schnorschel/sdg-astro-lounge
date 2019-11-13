@@ -10,3 +10,109 @@ body {
   margin: 0;
   min-height: 100%;
 }
+
+.header {
+  display: flex;
+  background-color: rgb(81, 45, 168);
+  color: white;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.5rem;
+}
+
+.logoContainer a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  padding: 0 10px;
+}
+
+.nav {
+  display: flex;
+  list-style-type: none;
+}
+
+.nav li {
+  padding: 0 20px;
+}
+
+.nav li a {
+  color: white;
+}
+
+.aotdContainer {
+  /* display: flex; */
+  /* position: absolute; */
+  height: 350px;
+  overflow: hidden;
+}
+.aotd {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: -11% 0;
+  /* height: 440px; */
+}
+
+.copyright {
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.launchesHeaderContainer {
+  background-color: rgb(255, 193, 7);
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 15px;
+}
+
+.missionStatementContainer {
+  background-color: rgb(209, 196, 233);
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  align-content: space-around;
+  flex-direction: column;
+  height: 180px;
+}
+
+.missionStatementHeader {
+  width: 100%;
+  text-align: center;
+  font-size: 1.75rem;
+}
+
+.missionStatementText {
+  font-size: 1.25rem;
+  margin: 0 10px;
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(103, 58, 183);
+  color: rgb(204, 204, 204);
+  height: 75px;
+}
+
+.footer a {
+  color: rgb(204, 204, 204);
+}
+
+.carouselContainer {
+  display: flex;
+}
+.arrowContainer {
+  flex-basis: 50px;
+  width: 50px;
+  background-color: aqua;
+}
+
+.infoContainer {
+  flex-basis: auto;
+}
