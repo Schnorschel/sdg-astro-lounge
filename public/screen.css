@@ -106,13 +106,42 @@ body {
 
 .carouselContainer {
   display: flex;
+  /* width: 100%; */
 }
 .arrowContainer {
-  flex-basis: 50px;
-  width: 50px;
-  background-color: aqua;
+  display: flex;
+  flex-basis: 150px;
+  width: 150px;
+  /* background-color: aqua; */
+}
+
+.leftArrowContainer {
+  justify-content: left;
+  align-items: center;
+}
+
+.rightArrowContainer {
+  justify-content: right;
+  align-items: center;
+}
+
+.infoContainerBorder {
+  background-color: rgb(237, 237, 237);
+  border-radius: 10px;
+  margin: 10px;
+  width: 100%;
+  color: rgb(33, 33, 33);
+  height: 250px;
 }
 
 .infoContainer {
-  flex-basis: auto;
+  margin: 10px;
+}
+
+hr {
+  color: rgb(169, 169, 169);
+}
+
+.missionName {
+  text-align: center;
 }

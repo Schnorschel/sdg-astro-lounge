@@ -27,7 +27,29 @@ const fetchUpcoming = async () => {
     return
   }
   upcomingJSON = await resp.json()
+  removePastMissions()
+  upcomingJSON.sort((a, b) => a.launch_date_unix - b.launch_date_unix)
   upcomingIndexPointer = 0
+  populateMission()
+}
+
+// Remove missions in the past from the array
+const removePastMissions = () => {
+  const now = new Date()
+  for (let i = 0; i < upcomingJSON.length; i++) {
+    if (upcomingJSON[i].launch_date_unix < now.getTime() / 1000) {
+      upcomingJSON.splice(i, 1)
+    }
+  }
+}
+
+const displayNextMission = () => {
+  upcomingIndexPointer = (upcomingIndexPointer + 1) % upcomingJSON.length
+  populateMission()
+}
+
+const displayPrevMission = () => {
+  upcomingIndexPointer = (upcomingIndexPointer - 1) % upcomingJSON.length
   populateMission()
 }
 
@@ -36,20 +58,32 @@ const populateMission = () => {
     return
   }
 
-  const missionName = upcomingJSON[upcomingIndexPointer].mission_name
+  const missionName =
+    upcomingJSON[upcomingIndexPointer].mission_name +
+    ' (' +
+    (upcomingIndexPointer + 1) +
+    ' of ' +
+    upcomingJSON.length +
+    ')'
   const missionDesc = upcomingJSON[upcomingIndexPointer].details
-  // qS('.missionCountdown').textContent = upcomingJSON[upcomingIndexPointer].details
-  const missionLaunch = (qS('.missionLaunchsite').textContent =
-    upcomingJSON[upcomingIndexPointer].launch_site.site_name_long)
+  let missionCountdown = upcomingJSON[upcomingIndexPointer].launch_date_unix
+  const missionLaunch = upcomingJSON[upcomingIndexPointer].launch_site.site_name_long
 
-  qS('.missionName').textContent = missionName(null ? 'No mission name available yet' : missionName)
-  qS('.missionDescription').textContent = missionDesc(
-    null ? 'No description available yet' : missionDesc
-  )
-  // qS('.missionCountdown').textContent = missionName (null ? 'No mission name yet' : missionName)
-  qS('.missionLaunchsite').textContent = missionLaunch(
-    null ? 'No launch site available yet' : missionLaunch
-  )
+  if (missionCountdown != null) {
+    const LaunchDate = new Date(missionCountdown * 1000)
+    missionCountdown = LaunchDate.toLocaleString()
+  }
+
+  qS('.missionName').textContent =
+    missionName == null ? 'No mission name available yet' : missionName
+  qS('.missionDescription').textContent =
+    missionDesc == null ? 'No description available yet' : missionDesc
+  qS('.missionCountdown').textContent =
+    missionCountdown == null ? 'No launch date yet' : missionCountdown
+  qS('.missionLaunchsite').textContent =
+    missionLaunch == null ? 'No launch site available yet' : missionLaunch
 }
 
 document.addEventListener('DOMContentLoaded', main)
+qS('.leftButton').addEventListener('click', displayPrevMission)
+qS('.rightButton').addEventListener('click', displayNextMission)
