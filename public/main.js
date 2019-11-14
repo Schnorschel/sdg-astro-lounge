@@ -2,14 +2,29 @@ const apodApiURL = 'https://sdg-astro-api.herokuapp.com/api/Nasa/apod'
 const upcomingApiURL = 'https://sdg-astro-api.herokuapp.com/api/SpaceX/launches/upcoming'
 let upcomingJSON
 let upcomingIndexPointer
+let cardTimerID
 
 const qS = e => document.querySelector(e)
 
 const main = () => {
   fetchApod()
   fetchUpcoming()
+  advanceCard()
 }
 
+const advanceCard = () => {
+  if (typeof cardTimerID === 'undefined' || cardTimerID == null) {
+    cardTimerID = setTimeout(displayNextMissionCycling, 10000)
+  }
+}
+
+const displayNextMissionCycling = () => {
+  displayNextMission()
+  cardTimerID = null
+  advanceCard()
+}
+
+// Fetch the data for the Astro-Photo Of the Day by API
 const fetchApod = async () => {
   const resp = await fetch(apodApiURL)
   if (resp.status != 200) {
@@ -21,6 +36,7 @@ const fetchApod = async () => {
   qS('.copyright').textContent = 'copyright: ' + apod.copyright + ' | title: ' + apod.title
 }
 
+// Fetch the upcoming SpaceX missions by API
 const fetchUpcoming = async () => {
   const resp = await fetch(upcomingApiURL)
   if (resp.status != 200) {
@@ -33,7 +49,7 @@ const fetchUpcoming = async () => {
   populateMission()
 }
 
-// Remove missions in the past from the array
+// Remove past missions from global array
 const removePastMissions = () => {
   const now = new Date()
   for (let i = 0; i < upcomingJSON.length; i++) {
@@ -43,16 +59,19 @@ const removePastMissions = () => {
   }
 }
 
+// Display next mission in array on card
 const displayNextMission = () => {
   upcomingIndexPointer = (upcomingIndexPointer + 1) % upcomingJSON.length
   populateMission()
 }
 
+// Display previous mission in array on card
 const displayPrevMission = () => {
   upcomingIndexPointer = (upcomingIndexPointer - 1) % upcomingJSON.length
   populateMission()
 }
 
+// Display mission with index number saved in upcomingIndexPointer on card
 const populateMission = () => {
   if (typeof upcomingIndexPointer === 'undefined') {
     return
