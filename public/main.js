@@ -16,6 +16,7 @@ const advanceCard = () => {
   if (typeof cardTimerID === 'undefined' || cardTimerID == null) {
     cardTimerID = setTimeout(displayNextMissionCycling, 10000)
   }
+  // clearTimeout(cardTimerID)
 }
 
 const displayNextMissionCycling = () => {
@@ -28,6 +29,7 @@ const displayNextMissionCycling = () => {
 const fetchApod = async () => {
   const resp = await fetch(apodApiURL)
   if (resp.status != 200) {
+    console.log('An error occurred fetching data from ' + apodApiURL)
     return
   }
   const apod = await resp.json()
@@ -40,6 +42,7 @@ const fetchApod = async () => {
 const fetchUpcoming = async () => {
   const resp = await fetch(upcomingApiURL)
   if (resp.status != 200) {
+    console.log('An error occurred fetching data from ' + upcomingApiURL)
     return
   }
   upcomingJSON = await resp.json()
@@ -51,7 +54,7 @@ const fetchUpcoming = async () => {
 
 // Remove past missions from global array
 const removePastMissions = () => {
-  const now = new Date()
+  const now = new Date() // get today's date and time in UNIX epoch unit
   for (let i = 0; i < upcomingJSON.length; i++) {
     if (upcomingJSON[i].launch_date_unix < now.getTime() / 1000) {
       upcomingJSON.splice(i, 1)
@@ -63,12 +66,14 @@ const removePastMissions = () => {
 const displayNextMission = () => {
   upcomingIndexPointer = (upcomingIndexPointer + 1) % upcomingJSON.length
   populateMission()
+  // advanceCard()
 }
 
 // Display previous mission in array on card
 const displayPrevMission = () => {
   upcomingIndexPointer = (upcomingIndexPointer - 1) % upcomingJSON.length
   populateMission()
+  // advanceCard()
 }
 
 // Display mission with index number saved in upcomingIndexPointer on card
