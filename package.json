@@ -14,7 +14,7 @@
     "singleQuote": true,
     "jsxSingleQuote": true,
     "useTabs": false,
-    "printWidth": 100
+    "printWidth": 120
   },
   "devDependencies": {
     "browser-sync": "^2.26.7",
