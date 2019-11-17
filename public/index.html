@@ -3,7 +3,8 @@
   <head lang="en">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SDG Astro Lounge</title>
+    <title>AstroView</title>
+    <script src="https://kit.fontawesome.com/aad46c371f.js" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="stylesheet" href="/screen.css" />
   </head>
@@ -16,29 +17,36 @@
       </ul>
     </section>
     <section class="aotdContainer">
-      <img src="" class="aotd" />
+      <!-- <img src="" class="aotd" /> -->
+      <section class="explore">Explore your universe.</section>
     </section>
-    <p class="copyright"></p>
+    <p class="copyright">copyright: loading | title: loading</p>
     <section class="launchesHeaderContainer">Upcoming SpaceX Launches</section>
     <section class="carouselContainer">
       <section class="leftArrowContainer arrowContainer">
-        <button class="leftButton">&lt;&lt;</button><img class="leftArrow arrow" />&nbsp;
+        <i class="fas fa-angle-left leftArrow arrow"></i>
       </section>
       <section class="infoContainerBorder">
         <section class="infoContainer">
-          <h3 class="missionName"></h3>
-          <p class="missionDescription"></p>
-          <hr />
-          <p class="missionCountdownContainer">
-            <span class="days"></span> days, <span class="hours"></span> hours, <span class="minutes"></span> mins,
-            <span class="seconds"></span> seconds (<span class="missionCountdown"></span>)
+          <h3 class="missionHeader"><i class="fas fa-space-shuttle"></i> <span class="missionName"></span></h3>
+          <p class="missionDescriptionContainer">
+            <i class="fas fa-info-circle"></i> <span class="missionDescription"></span>
           </p>
           <hr />
-          <p class="missionLaunchsite"></p>
+          <p class="missionCountdownContainer">
+            <i class="fas fa-clock"></i>
+            <!-- <span class="days"></span> days, <span class="hours"></span> hours, <span class="minutes"></span> mins,
+            <span class="seconds"></span> seconds -->
+            <span class="countDown"></span> (<span class="missionCountdown"></span>)
+          </p>
+          <hr />
+          <p class="missionLaunchsiteContainer">
+            <i class="fas fa-map-marked-alt"></i> <span class="missionLaunchsite"></span>
+          </p>
         </section>
       </section>
       <section class="rightArrowContainer arrowContainer">
-        <img class="rightArrow arrow" />&nbsp;<button class="rightButton">&gt;&gt;</button>
+        <i class="fas fa-angle-right rightArrow arrow"></i>
       </section>
     </section>
     <section class="missionStatementContainer">

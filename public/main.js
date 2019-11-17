@@ -3,15 +3,21 @@ const upcomingApiURL = 'https://sdg-astro-api.herokuapp.com/api/SpaceX/launches/
 let upcomingJSON
 let upcomingIndexPointer
 let cardTimerID
-let countDownTimeID
+let countDownTimerID
 
 const qS = e => document.querySelector(e)
 
 const main = () => {
   fetchApod()
   fetchUpcoming()
-  // advanceCard()
-  countDownTimeID = setInterval(startCountDown, 1000)
+  // advanceCardDelayed()
+  countDownTimerID = setInterval(startCountDownTimer, 1000)
+  cardTimerID = setInterval(displayNextMission, 10000)
+}
+
+// Since % doesn't handle negative numbers as expected...
+const mod = (n, m) => {
+  return ((n % m) + m) % m
 }
 
 const isDefinedAndAssigned = data => {
@@ -23,49 +29,83 @@ const isDefinedAndAssigned = data => {
   return false
 }
 
-const startCountDown = () => {
+const startCountDownTimer = () => {
+  console.log('Started startCountDownTimer()')
   if (!isMissionDataLoaded()) {
     console.log('Mission data not available')
-    if (isDefinedAndAssigned(countDownTimeID)) {
-      clearInterval(countDownTimeID)
+    if (isDefinedAndAssigned(countDownTimerID)) {
+      clearInterval(countDownTimerID)
     }
     return
   }
   const deadline = upcomingJSON[upcomingIndexPointer].launch_date_unix * 1000
+  console.log('Deadline: ' + deadline)
   if (typeof deadline === 'undefined' || deadline == null) {
     return
   }
   const now = new Date().getTime()
   const t = deadline - now
+  console.log('Time left: ' + t)
   const days = Math.floor(t / (1000 * 60 * 60 * 24))
   const hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
   const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))
   const seconds = Math.floor((t % (1000 * 60)) / 1000)
-  qS('.days').textContent = days
-  qS('.hours').textContent = hours
-  qS('.minutes').textContent = minutes
-  qS('.seconds').textContent = seconds
+  qS('.countDown').textContent =
+    days +
+    ' day' +
+    PluralS(days) +
+    ', ' +
+    hours +
+    ' hour' +
+    PluralS(hours) +
+    ', ' +
+    minutes +
+    ' minute' +
+    PluralS(minutes) +
+    ', ' +
+    seconds +
+    ' second' +
+    PluralS(seconds)
+  // qS('.days').textContent = days
+  // qS('.hours').textContent = hours
+  // qS('.minutes').textContent = minutes
+  // qS('.seconds').textContent = seconds
   if (t < 0) {
-    clearInterval(countDownTimeID)
-    // qS('demo').textContent = 'TIME UP'
-    qS('.days').textContent = '0'
-    qS('.hours').textContent = '0'
-    qS('.minutes').textContent = '0'
-    qS('.seconds').textContent = '0'
+    clearInterval(countDownTimerID)
+    qS('.countDown').textContent = 'Launched!'
+    // qS('.days').textContent = '0'
+    // qS('.hours').textContent = '0'
+    // qS('.minutes').textContent = '0'
+    // qS('.seconds').textContent = '0'
   }
 }
 
-const advanceCard = () => {
+// Given number returns 's' if number is 0 or >1; to append to words to make them plural
+// If number == 1 returns ''
+const PluralS = number => {
+  return number === 1 ? '' : 's'
+}
+
+const advanceCardDelayed = () => {
   if (typeof cardTimerID === 'undefined' || cardTimerID == null) {
     cardTimerID = setTimeout(displayNextMissionCycling, 10000)
+  } else {
+    clearTimeout(cardTimerID)
   }
-  // clearTimeout(cardTimerID)
+}
+
+const stopCountDownTimer = () => {
+  if (typeof countDownTimerID !== 'undefined') {
+    if (countDownTimerID != null) {
+      clearTimeout(countDownTimerID)
+    }
+  }
 }
 
 const displayNextMissionCycling = () => {
   displayNextMission()
   cardTimerID = null
-  advanceCard()
+  advanceCardDelayed()
 }
 
 // Fetch the data for the Astro-Photo Of the Day by API
@@ -77,7 +117,8 @@ const fetchApod = async () => {
   }
   const apod = await resp.json()
   // qS('.aotdContainer').style.backgroundImage = 'url("' + apod.url + '")'
-  qS('.aotd').src = apod.url
+  // qS('.aotd').src = apod.url
+  qS('.aotdContainer').style.backgroundImage = 'url("' + apod.url + '")'
   qS('.copyright').textContent = 'copyright: ' + apod.copyright + ' | title: ' + apod.title
 }
 
@@ -90,7 +131,7 @@ const fetchUpcoming = async () => {
   }
   upcomingJSON = await resp.json()
   removePastMissions()
-  upcomingJSON.sort((a, b) => a.launch_date_unix - b.launch_date_unix)
+  upcomingJSON.sort((a, b) => parseInt(a.launch_date_unix) - parseInt(b.launch_date_unix))
   upcomingIndexPointer = 0
   populateMissionData()
 }
@@ -98,25 +139,41 @@ const fetchUpcoming = async () => {
 // Remove past missions from global array
 const removePastMissions = () => {
   const now = new Date() // get now in UNIX epoch unit
+  // console.log('Now: ' + parseInt(now.getTime() / 1000))
   for (let i = 0; i < upcomingJSON.length; i++) {
-    if (upcomingJSON[i].launch_date_unix < now.getTime() / 1000) {
+    // const msg = 'Mission "' + upcomingJSON[i].mission_name + ' [' + i + ']" (' + upcomingJSON[i].launch_date_unix + ')'
+    if (parseInt(upcomingJSON[i].launch_date_unix) < parseInt(now.getTime() / 1000)) {
+      // console.log(msg + ' <- removed')
       upcomingJSON.splice(i, 1)
+    } else {
+      // console.log(msg)
     }
   }
 }
 
 // Display next mission in array on card
 const displayNextMission = () => {
+  stopCountDownTimer()
+  qS('.countDown').textContent = ''
+  // Advance the pointer to the currently displayed mission by one (with wrap-around to 0 at last array element)
   upcomingIndexPointer = (upcomingIndexPointer + 1) % upcomingJSON.length
+  // Show the new mission data on the card
   populateMissionData()
-  // advanceCard()
+  // advanceCardDelayed()
+  // startCountDownTimer()
+  countDownTimerID = setInterval(startCountDownTimer, 1000)
 }
 
 // Display previous mission in array on card
 const displayPrevMission = () => {
-  upcomingIndexPointer = (upcomingIndexPointer - 1) % upcomingJSON.length
+  stopCountDownTimer()
+  qS('.countDown').textContent = ''
+  // Move the pointer to the currently displayed mission back by one (with wrap-around at last array element to 0)
+  upcomingIndexPointer = mod(upcomingIndexPointer - 1, upcomingJSON.length)
+  // Show the new mission data on the card
   populateMissionData()
-  // advanceCard()
+  // advanceCardDelayed()
+  countDownTimerID = setInterval(startCountDownTimer, 1000)
 }
 
 const isMissionDataLoaded = () => {
@@ -153,5 +210,5 @@ const populateMissionData = () => {
 }
 
 document.addEventListener('DOMContentLoaded', main)
-qS('.leftButton').addEventListener('click', displayPrevMission)
-qS('.rightButton').addEventListener('click', displayNextMission)
+qS('.leftArrow').addEventListener('click', displayPrevMission)
+qS('.rightArrow').addEventListener('click', displayNextMission)

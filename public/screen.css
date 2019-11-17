@@ -30,28 +30,54 @@ body {
 .nav {
   display: flex;
   list-style-type: none;
+  align-items: baseline;
 }
 
 .nav li {
-  padding: 0 20px;
+  padding: 100% 20px;
 }
 
 .nav li a {
   color: white;
 }
+.nav li:hover {
+  background-color: rgb(255, 193, 7);
+}
+
+.nav li:hover a {
+  background-color: rgb(255, 193, 7);
+  color: black;
+}
 
 .aotdContainer {
   /* display: flex; */
-  /* position: absolute; */
+  position: relative;
   height: 350px;
-  overflow: hidden;
+  /* overflow: hidden; */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .aotd {
   display: block;
   width: 100%;
   padding: 0;
   margin: -25% 0;
   /* height: 440px; */
+}
+
+.explore {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .copyright {
@@ -75,7 +101,7 @@ body {
   /* align-items: center; */
   align-content: space-around;
   flex-direction: column;
-  height: 180px;
+  /* height: 180px; */
 }
 
 .missionStatementHeader {
@@ -86,7 +112,7 @@ body {
 
 .missionStatementText {
   font-size: 1.25rem;
-  margin: 0 10px;
+  margin: 0 10px 2.5rem;
   text-align: center;
 }
 
@@ -108,21 +134,51 @@ body {
   display: flex;
   /* width: 100%; */
 }
+
 .arrowContainer {
   display: flex;
-  flex-basis: 150px;
+  /* position: relative; */
+  /* flex-basis: 150px; */
   width: 150px;
+  align-items: center;
+  /* border: 1px solid black; */
   /* background-color: aqua; */
 }
 
 .leftArrowContainer {
   justify-content: left;
-  align-items: center;
 }
 
 .rightArrowContainer {
   justify-content: right;
-  align-items: center;
+  /* border: 1px solid black; */
+}
+
+.arrow {
+  /* display: table-cell; */
+  font-size: 2rem;
+  border-style: outset;
+  border-color: rgb(227, 227, 227);
+  border-width: 2px;
+  /* padding: 0 27px; */
+  padding: 5% 27px 5px 27px;
+  vertical-align: middle;
+  margin-top: -3px;
+  margin-bottom: -3px;
+  background-color: rgb(255, 193, 7);
+  height: 14%;
+}
+
+.arrow:active {
+  background-color: rgb(103, 58, 183);
+}
+
+.leftArrow {
+  border-radius: 0 25px 25px 0;
+}
+
+.rightArrow {
+  border-radius: 25px 0 0 25px;
 }
 
 .infoContainerBorder {
@@ -131,7 +187,8 @@ body {
   margin: 10px;
   width: 100%;
   color: rgb(33, 33, 33);
-  height: 250px;
+  padding-bottom: 1.5rem;
+  /* height: 250px; */
 }
 
 .infoContainer {
@@ -143,5 +200,8 @@ hr {
 }
 
 .missionName {
+}
+
+.missionHeader {
   text-align: center;
 }
