@@ -124,7 +124,11 @@ const fetchApod = async () => {
   // qS('.aotdContainer').style.backgroundImage = 'url("' + apod.url + '")'
   // qS('.aotd').src = apod.url
   qS('.aotdContainer').style.backgroundImage = 'url("' + apod.url + '")'
-  qS('.copyright').textContent = 'copyright: ' + apod.copyright + ' | title: ' + apod.title
+  qS('.copyright').textContent =
+    'copyright: ' +
+    (apod.copyright === null ? 'not provided' : apod.copyright) +
+    ' | title: ' +
+    (apod.title === null ? 'not provided' : apod.title)
 }
 
 // Fetch the upcoming SpaceX missions by API and display the data on the page
